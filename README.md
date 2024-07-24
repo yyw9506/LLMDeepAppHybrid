@@ -1,5 +1,5 @@
 ### Intro
-A simple project for LLM application, aimed at answer domain questions.
+A simple project for LLM application, aimed at answering domain questions.
 
 
 
