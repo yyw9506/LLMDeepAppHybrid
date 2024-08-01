@@ -10,7 +10,7 @@ from app.util.sentence_util import SentenceUtil
 
 class ModelUtil:
     def __init__(self):
-        self.url = "http://10.188.48.146:8088/naturalLanguageProcessing/llm-chat072402/v1/chat/completions"
+        self.url = "${url}"
         self.authorization = "ACCESSCODE 647B1B5EE06D4413CF6E0459D2CC9616"
         self.content_type = "application/json"
 
