@@ -118,3 +118,4 @@ class ModelUtil:
             except Exception as e:
                 return "模型服务异常：" + str(e)
         return self.get_consistent_response(answer_list, vote_strategy, threshold)
+

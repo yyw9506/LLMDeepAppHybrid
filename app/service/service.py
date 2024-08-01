@@ -1,3 +1,4 @@
+# encoding:utf-8
 from app.util.knowledge_util import KnowledgeUtil
 from app.util.model_util import ModelUtil
 

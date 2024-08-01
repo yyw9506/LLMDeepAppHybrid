@@ -1,3 +1,4 @@
+# encoding:utf-8
 import faiss
 from sentence_transformers import SentenceTransformer
 
