@@ -29,14 +29,14 @@ def get_answer_from_model_with_self_consistency(question: str,
     refs, indices = knowledge_model.get_top_k_similar(processed_question, 3)
     average_similarity = 0
     filtered_indices = []
-    for i, index in indices:
+    for i in range(0, len(indices)):
         embedding1 = sentence_util.get_embedding(processed_question)
-        embedding2 = sentence_util.get_embedding(KnowledgeUtil.lines[index])
+        embedding2 = sentence_util.get_embedding(KnowledgeUtil.lines[indices[i]])
         cosine_similarity_score = sentence_util.get_cosine_sim_score(embedding1, embedding2)
         average_similarity += cosine_similarity_score
         average_similarity /= (i + 1)
         if cosine_similarity_score > 0.7:
-            filtered_indices.append(index)
+            filtered_indices.append(indices[i])
 
     if len(filtered_indices) > 0:
         return app_model.get_answer_to_question_with_consistency(processed_question, 3, "cosine", 0.6, indices)
