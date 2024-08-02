@@ -1,30 +1,17 @@
-# encoding:utf-8
 from app.util.knowledge_util import KnowledgeUtil
+from app.util.sentence_util import SentenceUtil
 from app.util.model_util import ModelUtil
 
 # 加载本地知识库
 app_model = ModelUtil()
+sentence_util = SentenceUtil()
 knowledge_model = KnowledgeUtil()
 
 
 def switch_model_domain(domain: str):
-    if domain == "business":
-        print("加载本地业务知识库")
-        KnowledgeUtil.switch_knowledge_module(domain)
-        print("本地业务知识库加载完成")
-    elif domain == "code":
-        print("加载本地代码知识库")
-        # to-do
-
-        # to-do
-        print("本地代码知识库加载完成")
-    else:
-        pass
-
-
-def get_answer_from_model(message: str):
-    refs = knowledge_model.get_top_k_similar(message, 3)
-    return app_model.get_user_question_response(message, refs)
+    print("切换本地业务知识库")
+    KnowledgeUtil.switch_knowledge_module(domain)
+    print("切换业务知识库加载完成")
 
 
 def get_answer_from_model_with_self_consistency(question: str,
@@ -36,21 +23,30 @@ def get_answer_from_model_with_self_consistency(question: str,
             question,
             vote_n,
             vote_strategy,
-            threshold)
+            threshold
+        )
     )
-    refs = knowledge_model.get_top_k_similar(processed_question, 3)
-    print(refs)
-    # to-do
-    for i in range(0, vote_n):
-        pass
+    refs, indices = knowledge_model.get_top_k_similar(processed_question, 3)
+    average_similarity = 0
+    filtered_indices = []
+    for i, index in indices:
+        embedding1 = sentence_util.get_embedding(processed_question)
+        embedding2 = sentence_util.get_embedding(KnowledgeUtil.lines[index])
+        cosine_similarity_score = sentence_util.get_cosine_sim_score(embedding1, embedding2)
+        average_similarity += cosine_similarity_score
+        average_similarity /= (i + 1)
+        if cosine_similarity_score > 0.7:
+            filtered_indices.append(index)
 
-    # to-do
-    return ""
+    if len(filtered_indices) > 0:
+        return app_model.get_answer_to_question_with_consistency(processed_question, 3, "cosine", 0.6, indices)
+    else:
+        print("cannot provide reliable response")
+        return "无法提供可靠回答"
 
 
 def get_compressed_question_from_model_with_self_consistency(question: str,
                                                              vote_n: int,
                                                              vote_strategy: str,
                                                              threshold: float):
-
-    return app_model.get_compressed_user_question_with_consistency(question, vote_n, vote_strategy, threshold)
+    return app_model.get_compressed_question_with_consistency(question, vote_n, vote_strategy, threshold)

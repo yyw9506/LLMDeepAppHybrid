@@ -1,4 +1,3 @@
-# encoding:utf-8
 from flask import Flask, Blueprint, jsonify, request
 from app.service.service import get_compressed_question_from_model_with_self_consistency, \
     switch_model_domain, get_answer_from_model_with_self_consistency
