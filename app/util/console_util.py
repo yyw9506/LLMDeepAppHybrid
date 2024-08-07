@@ -3,7 +3,7 @@ import sys
 
 class ConsoleUtil:
 
-    @classmethod
+    @staticmethod
     def print_progress(cls, iteration: int, total: int, prefix='', suffix='', decimals=1, bar_length=100):
         format_str = "{0:." + str(decimals) + "f}"
         percent = format_str.format(100 * (iteration / float(total)))

@@ -39,7 +39,7 @@ def get_answer_from_model_with_self_consistency(question: str,
             filtered_indices.append(indices[i])
 
     if len(filtered_indices) > 0:
-        return app_model.get_answer_to_question_with_consistency(processed_question, 3, "cosine", 0.6, indices)
+        return app_model.get_answer_to_question_with_consistency(processed_question, 3, "cosine", 0.6, filtered_indices)
     else:
         print("cannot provide reliable response")
         return "无法提供可靠回答"
